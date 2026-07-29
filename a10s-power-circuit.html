@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دائرة الباور — Samsung A10s</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pcb-bg:#0a1410;
+  --pcb-bg-2:#0d1a14;
+  --copper:#c9852f;
+  --copper-bright:#e8a94a;
+  --trace:#2ea36b;
+  --trace-bright:#3fe08a;
+  --silk:#e9f1ec;
+  --silk-dim:#9db3a8;
+  --danger:#e0563f;
+  --mask:#123326;
+  --card:#0f2019;
+  --line:#1e3b2c;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--pcb-bg);
+  color:var(--silk);
+  font-family:'Tajawal', sans-serif;
+  overflow-x:hidden;
+  position:relative;
+}
+/* PCB texture background */
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:42px 42px;
+  opacity:.18;
+  pointer-events:none;
+  z-index:0;
+}
+body::after{
+  content:"";
+  position:fixed; inset:0;
+  background:radial-gradient(circle at 20% 10%, rgba(46,163,107,.10), transparent 45%),
+             radial-gradient(circle at 85% 80%, rgba(201,133,47,.08), transparent 40%);
+  pointer-events:none;
+  z-index:0;
+}
+.wrap{position:relative; z-index:1; max-width:1180px; margin:0 auto; padding:0 22px;}
+
+/* ---------- HERO ---------- */
+header.hero{
+  padding:64px 0 40px;
+  position:relative;
+  border-bottom:1px solid var(--line);
+}
+.eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  font-size:13px;
+  color:var(--copper-bright);
+  letter-spacing:.12em;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:18px;
+}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--trace-bright); box-shadow:0 0 8px var(--trace-bright); animation:pulse 1.8s infinite;}
+@keyframes pulse{0%,100%{opacity:1} 50%{opacity:.25}}
+
+h1.title{
+  font-family:'Cairo', sans-serif;
+  font-weight:900;
+  font-size:clamp(34px, 6vw, 64px);
+  line-height:1.1;
+  color:var(--silk);
+}
+h1.title span{color:var(--trace-bright);}
+.subtitle{
+  margin-top:16px;
+  max-width:640px;
+  color:var(--silk-dim);
+  font-size:17px;
+  line-height:1.9;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:40px;
+  align-items:center;
+}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+
+.hero-diagram{position:relative;}
+.hero-diagram svg{width:100%; height:auto; display:block;}
+
+.chip-badge{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--mask); border:1px solid var(--line);
+  border-radius:30px; padding:6px 14px;
+  font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--copper-bright);
+  margin-top:22px;
+}
+
+/* ---------- NOTICE ---------- */
+.notice{
+  margin:28px 0 0;
+  background:linear-gradient(90deg, rgba(224,86,63,.12), rgba(224,86,63,.03));
+  border:1px solid rgba(224,86,63,.4);
+  border-right:4px solid var(--danger);
+  border-radius:8px;
+  padding:16px 20px;
+  font-size:14.5px;
+  color:var(--silk);
+  line-height:1.9;
+  display:flex; gap:12px;
+}
+.notice svg{flex:none; width:22px; height:22px; margin-top:2px; color:var(--danger)}
+
+/* ---------- SECTION HEADERS ---------- */
+.section{padding:64px 0;}
+.section-head{margin-bottom:38px;}
+.tag{
+  font-family:'JetBrains Mono', monospace;
+  color:var(--trace-bright);
+  font-size:12.5px;
+  letter-spacing:.1em;
+  border:1px solid var(--line);
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:5px;
+  background:rgba(46,163,107,.07);
+}
+h2.section-title{
+  font-family:'Cairo', sans-serif;
+  font-weight:800;
+  font-size:clamp(24px,4vw,34px);
+  margin-top:12px;
+}
+.section-desc{color:var(--silk-dim); max-width:680px; margin-top:10px; line-height:1.9; font-size:15.5px;}
+
+/* ---------- FLOW / TIMELINE ---------- */
+.flow{position:relative;}
+.flow-line{
+  position:absolute; top:0; bottom:0; right:29px;
+  width:2px;
+  background:repeating-linear-gradient(var(--trace) 0 6px, transparent 6px 12px);
+}
+@media(max-width:700px){.flow-line{right:19px;}}
+
+.stage{
+  position:relative;
+  display:grid;
+  grid-template-columns:60px 1fr;
+  gap:22px;
+  padding-bottom:38px;
+}
+@media(max-width:700px){.stage{grid-template-columns:40px 1fr; gap:14px;}}
+
+.stage-node{
+  position:relative;
+  width:60px; height:60px;
+  border-radius:12px;
+  background:var(--card);
+  border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--copper-bright);
+  z-index:2;
+}
+@media(max-width:700px){.stage-node{width:40px;height:40px;border-radius:9px;}}
+.stage-node svg{width:28px;height:28px;}
+@media(max-width:700px){.stage-node svg{width:20px;height:20px;}}
+
+.stage-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:22px 24px;
+  transition:border-color .25s, transform .25s;
+}
+.stage-card:hover{border-color:var(--trace); transform:translateY(-2px);}
+
+.stage-top{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+.stage-name{font-family:'Cairo',sans-serif; font-weight:700; font-size:19px; color:var(--silk);}
+.stage-code{
+  font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--trace-bright);
+  background:rgba(46,163,107,.08); border:1px solid var(--line);
+  padding:3px 9px; border-radius:20px;
+}
+.stage-desc{color:var(--silk-dim); font-size:14.5px; line-height:1.85; margin-top:10px;}
+
+.values{
+  display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;
+}
+.value-chip{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  background:var(--mask);
+  color:var(--copper-bright);
+  border:1px dashed var(--line);
+  padding:6px 10px;
+  border-radius:6px;
+}
+.value-chip b{color:var(--silk);}
+
+.fault{
+  margin-top:14px;
+  font-size:13.5px;
+  color:var(--silk-dim);
+  border-right:2px solid var(--danger);
+  padding-right:12px;
+  line-height:1.8;
+}
+.fault b{color:var(--danger); font-weight:700;}
+
+/* ---------- COMPONENT LEGEND GRID ---------- */
+.legend-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+  gap:16px;
+}
+.legend-card{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:18px 20px;
+}
+.legend-top{display:flex; align-items:center; gap:12px;}
+.legend-icon{
+  width:42px;height:42px;border-radius:9px;
+  background:var(--mask); display:flex; align-items:center; justify-content:center;
+  color:var(--trace-bright); flex:none;
+}
+.legend-icon svg{width:22px;height:22px;}
+.legend-name{font-weight:700; font-family:'Cairo',sans-serif; font-size:15.5px;}
+.legend-sym{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--copper-bright);}
+.legend-body{font-size:13.5px; color:var(--silk-dim); margin-top:10px; line-height:1.8;}
+
+/* ---------- TEST POINTS TABLE ---------- */
+.table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px;}
+table{width:100%; border-collapse:collapse; min-width:640px;}
+thead th{
+  text-align:right;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px; letter-spacing:.06em;
+  color:var(--trace-bright);
+  background:var(--mask);
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+}
+tbody td{
+  padding:14px 16px;
+  font-size:14px;
+  color:var(--silk-dim);
+  border-bottom:1px solid var(--line);
+}
+tbody tr:last-child td{border-bottom:none;}
+tbody td:first-child{color:var(--silk); font-weight:700; font-family:'Cairo',sans-serif;}
+tbody td .mono{font-family:'JetBrains Mono',monospace; color:var(--copper-bright);}
+
+/* ---------- FOOTER ---------- */
+footer{
+  padding:40px 0 60px;
+  border-top:1px solid var(--line);
+  color:var(--silk-dim);
+  font-size:13px;
+  line-height:2;
+}
+footer b{color:var(--silk);}
+
+/* animated current dots along the connecting line in stage flow */
+.stage-node::after{
+  content:"";
+  position:absolute; right:50%; transform:translateX(50%);
+  bottom:-38px;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--trace-bright);
+  box-shadow:0 0 6px var(--trace-bright);
+  animation:flow 2.2s linear infinite;
+}
+.stage:last-child .stage-node::after{display:none;}
+@keyframes flow{
+  0%{opacity:0; bottom:0;}
+  10%{opacity:1;}
+  90%{opacity:1;}
+  100%{opacity:0; bottom:-38px;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .eyebrow .dot, .stage-node::after{animation:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> SM-A107F / A10s — POWER TREE</div>
+        <h1 class="title">شرح دائرة <span>الباور</span><br>لهاتف A10s</h1>
+        <p class="subtitle">
+          رحلة التيار من البطارية حتى وصوله للمعالج: المكونات، مسارات الترانزستور والفيوزات، وأشهر نقاط الأعطال في كل مرحلة — بأسلوب بصري يشبه قراءة اللوحة نفسها.
+        </p>
+        <div class="chip-badge">⏚ VBAT → PMIC → CPU RAILS</div>
+      </div>
+      <div class="hero-diagram">
+        <svg viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="traceGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3fe08a"/>
+              <stop offset="1" stop-color="#2ea36b"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="360" height="300" rx="18" fill="#0f2019" stroke="#1e3b2c"/>
+          <!-- battery -->
+          <rect x="24" y="130" width="52" height="40" rx="4" fill="#123326" stroke="#c9852f"/>
+          <rect x="76" y="142" width="8" height="16" fill="#c9852f"/>
+          <text x="50" y="185" font-size="10" fill="#9db3a8" text-anchor="middle" font-family="JetBrains Mono">VBAT</text>
+          <!-- traces -->
+          <path d="M84 150 H140" stroke="url(#traceGrad)" stroke-width="3" fill="none"/>
+          <circle cx="112" cy="150" r="3" fill="#3fe08a"><animate attributeName="cx" values="88;136" dur="1.6s" repeatCount="indefinite"/></circle>
+          <!-- fuse -->
+          <rect x="140" y="138" width="26" height="24" rx="3" fill="#123326" stroke="#e0563f"/>
+          <text x="153" y="176" font-size="9" fill="#9db3a8" text-anchor="middle" font-family="JetBrains Mono">FUSE</text>
+          <path d="M166 150 H210" stroke="url(#traceGrad)" stroke-width="3" fill="none"/>
+          <circle cx="188" cy="150" r="3" fill="#3fe08a"><animate attributeName="cx" values="166;208" dur="1.6s" repeatCount="indefinite" begin="0.3s"/></circle>
+          <!-- PMIC chip -->
+          <rect x="210" y="110" width="70" height="80" rx="6" fill="#123326" stroke="#e8a94a" stroke-width="1.5"/>
+          <text x="245" y="145" font-size="11" fill="#e8a94a" text-anchor="middle" font-family="JetBrains Mono" font-weight="700">PMIC</text>
+          <text x="245" y="160" font-size="8.5" fill="#9db3a8" text-anchor="middle" font-family="JetBrains Mono">MAIN PWR IC</text>
+          <!-- pins -->
+          <path d="M206 122 H210 M206 150 H210 M206 178 H210" stroke="#c9852f" stroke-width="2"/>
+          <path d="M280 122 H284 M280 150 H284 M280 178 H284" stroke="#c9852f" stroke-width="2"/>
+          <!-- outputs to CPU -->
+          <path d="M284 122 H320" stroke="url(#traceGrad)" stroke-width="2" fill="none"/>
+          <path d="M284 150 H320" stroke="url(#traceGrad)" stroke-width="2" fill="none"/>
+          <path d="M284 178 H320" stroke="url(#traceGrad)" stroke-width="2" fill="none"/>
+          <circle cx="300" cy="122" r="2.5" fill="#3fe08a"><animate attributeName="cx" values="286;318" dur="1.3s" repeatCount="indefinite"/></circle>
+          <circle cx="300" cy="178" r="2.5" fill="#3fe08a"><animate attributeName="cx" values="286;318" dur="1.3s" repeatCount="indefinite" begin="0.4s"/></circle>
+          <rect x="320" y="105" width="26" height="90" rx="4" fill="#123326" stroke="#9db3a8"/>
+          <text x="333" y="152" font-size="8" fill="#9db3a8" text-anchor="middle" font-family="JetBrains Mono" transform="rotate(90 333 152)">AP / CPU</text>
+          <!-- power key -->
+          <circle cx="245" cy="235" r="16" fill="#123326" stroke="#c9852f"/>
+          <text x="245" y="239" font-size="12" fill="#c9852f" text-anchor="middle">⏻</text>
+          <path d="M245 219 V190" stroke="#c9852f" stroke-width="2" stroke-dasharray="3 3"/>
+          <text x="245" y="262" font-size="9" fill="#9db3a8" text-anchor="middle" font-family="JetBrains Mono">PWR KEY</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="notice">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+      <div>
+        <b>تنبيه هام:</b> القيم والألوان والمواقع هنا <b>تقريبية وتعليمية</b> لشرح <b>فكرة</b> عمل دائرة الباور بشكل عام على أغلب هواتف Samsung من هذه الفئة، وليست نسخة طبق الأصل من السكيمى أو البورد فيو الرسمي لجهاز A10s. قبل أي تصليح فعلي، راجع دائمًا <b>Schematic / Boardview</b> الأصلي للجهاز وتأكد بالمالتيميتر من القيم الحقيقية على البورد.
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= STAGES ================= -->
+  <section class="section" id="stages">
+    <div class="section-head">
+      <span class="tag">01 — POWER PATH</span>
+      <h2 class="section-title">مسار التيار خطوة بخطوة</h2>
+      <p class="section-desc">من لحظة تركيب البطارية إلى إضاءة الشاشة، يمر التيار بعدة محطات، كل محطة لها دور محدد ونقطة فحص خاصة بها.</p>
+    </div>
+
+    <div class="flow">
+      <div class="flow-line"></div>
+
+      <!-- Stage 1 -->
+      <div class="stage">
+        <div class="stage-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M18 10h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2"/><path d="M6 10v4M9 10v4"/></svg>
+        </div>
+        <div class="stage-card">
+          <div class="stage-top">
+            <span class="stage-name">1 — موصل البطارية (Battery Connector / BTB)</span>
+            <span class="stage-code">VBAT_IN</span>
+          </div>
+          <p class="stage-desc">نقطة دخول الجهد من البطارية إلى البورد مباشرة عبر كونيكتور BTB، وهو أول نقطة يجب فحصها عند "عدم شحن" الجهاز إطلاقًا.</p>
+          <div class="values">
+            <span class="value-chip">الجهد الطبيعي: <b>٣.٧ - ٤.٢ فولت</b></span>
+            <span class="value-chip">نوع الفحص: <b>مالتيميتر DC</b></span>
+          </div>
+          <div class="fault"><b>عطل شائع:</b> كونيكتور مكسور أو أوكسدة تمنع وصول الفولت للبورد بالكامل.</div>
+        </div>
+      </div>
+
+      <!-- Stage 2 -->
+      <div class="stage">
+        <div class="stage-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="2" width="6" height="8" rx="2"/><path d="M12 10v4"/><path d="M7 14a5 5 0 1 0 10 0"/></svg>
+        </div>
+        <div class="stage-card">
+          <div class="stage-top">
+            <span class="stage-name">2 — الفيوز الرئيسي (Main Fuse)</span>
+            <span class="stage-code">F_BAT</span>
+          </div>
+          <p class="stage-desc">مكون حماية يقع مباشرة بعد كونيكتور البطارية، وظيفته قطع التيار تلقائيًا عند حدوث تماس أو زيادة سحب غير طبيعية لحماية بقية الدائرة.</p>
+          <div class="values">
+            <span class="value-chip">المقاومة الطبيعية: <b>≈ ٠ أوم (دائرة مغلقة)</b></span>
+            <span class="value-chip">الحالة عند التماس: <b>مفتوح / لانهاية</b></span>
+          </div>
+          <div class="fault"><b>عطل شائع:</b> فيوز مفتوح بسبب تماس تالي في الدائرة يسحب تيار عالي، فيقطع هو نفسه ليحمي البورد.</div>
+        </div>
+      </div>
+
+      <!-- Stage 3 -->
+      <div class="stage">
+        <div class="stage-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>
+        </div>
+        <div class="stage-card">
+          <div class="stage-top">
+            <span class="stage-name">3 — الـ PMIC (دائرة إدارة الطاقة الرئيسية)</span>
+            <span class="stage-code">MAIN PWR IC</span>
+          </div>
+          <p class="stage-desc">"قلب" دائرة الباور — تستقبل VBAT وتوزّعه على شكل عدة جهود (Rails) مختلفة للمعالج والذاكرة والشاشة والمودم، ولا يبدأ الجهاز التشغيل إطلاقًا بدون خروج جهودها بشكل صحيح.</p>
+          <div class="values">
+            <span class="value-chip">مدخل: <b>VBAT ≈ ٣.٧-٤.٢ فولت</b></span>
+            <span class="value-chip">مخارج نموذجية: <b>١.٨ / ١.٢ / ٠.٩ فولت</b></span>
+            <span class="value-chip">مكثفات فلترة قريبة: <b>١ - ١٠ ميكروفاراد</b></span>
+          </div>
+          <div class="fault"><b>عطل شائع:</b> سخونة زائدة في الـ IC نفسه أو سحب تيار مرتفع (Short) يمنع ظهور أي جهد خارج منه، فيظهر الجهاز "ميت" تمامًا.</div>
+        </div>
+      </div>
+
+      <!-- Stage 4 -->
+      <div class="stage">
+        <div class="stage-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        <div class="stage-card">
+          <div class="stage-top">
+            <span class="stage-name">4 — زر الباور (Power Key)</span>
+            <span class="stage-code">PWR_KEY</span>
+          </div>
+          <p class="stage-desc">يرسل إشارة "Trigger" منخفضة الجهد إلى الـ PMIC لتنبيهها ببدء عملية الإقلاع (Power On)، وهو مجرد مفتاح إشارة وليس ممر للتيار الرئيسي.</p>
+          <div class="values">
+            <span class="value-chip">جهد الإشارة: <b>≈ ١.٨ فولت (Pull-up)</b></span>
+            <span class="value-chip">عند الضغط: <b>ينخفض إلى ٠ فولت (Ground)</b></span>
+          </div>
+          <div class="fault"><b>عطل شائع:</b> كسر في مسار الإشارة أو تلف الزر نفسه يمنع أي استجابة عند الضغط رغم وصول الشحن.</div>
+        </div>
+      </div>
+
+      <!-- Stage 5 -->
+      <div class="stage">
+        <div class="stage-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
+        </div>
+        <div class="stage-card">
+          <div class="stage-top">
+            <span class="stage-name">5 — IC الشحن (Charging IC)</span>
+            <span class="stage-code">CHG IC</span>
+          </div>
+          <p class="stage-desc">يستقبل الجهد القادم من كابل الشحن عبر منفذ USB، وينظّمه قبل تمريره للبطارية، مع التحكم في تيار الشحن ودرجة حرارته.</p>
+          <div class="values">
+            <span class="value-chip">دخل من الشاحن: <b>٥ فولت</b></span>
+            <span class="value-chip">خرج للبطارية: <b>≈ ٤.٤ فولت (شحن كامل)</b></span>
+            <span class="value-chip">ملف/كويل قريب: <b>١ - ٢.٢ ميكرو هنري</b></span>
+          </div>
+          <div class="fault"><b>عطل شائع:</b> سخونة IC الشحن أو تلفه يمنع دخول أي شحن رغم ظهور "علامة الشحن" أو بدونها.</div>
+        </div>
+      </div>
+
+      <!-- Stage 6 -->
+      <div class="stage">
+        <div class="stage-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6v6H9z"/></svg>
+        </div>
+        <div class="stage-card">
+          <div class="stage-top">
+            <span class="stage-name">6 — جهود المعالج (CPU / AP Rails)</span>
+            <span class="stage-code">VDD_CORE</span>
+          </div>
+          <p class="stage-desc">آخر محطة: جهود دقيقة جدًا تخرج من الـ PMIC لتغذية نواة المعالج (AP) مباشرة، وبمجرد استقرارها يبدأ المعالج بتنفيذ كود الإقلاع (Boot ROM).</p>
+          <div class="values">
+            <span class="value-chip">جهد النواة: <b>≈ ٠.٨ - ١.١ فولت</b></span>
+            <span class="value-chip">تيار لحظة الإقلاع: <b>يرتفع بشكل ملحوظ</b></span>
+          </div>
+          <div class="fault"><b>عطل شائع:</b> "تماس" تحت المعالج نفسه يسحب هذا الجهد لمستوى شبه صفري فيمنع الجهاز من الإقلاع نهائيًا (Dead / No Display).</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= LEGEND ================= -->
+  <section class="section" id="legend">
+    <div class="section-head">
+      <span class="tag">02 — COMPONENTS</span>
+      <h2 class="section-title">دليل الرموز والمكونات</h2>
+      <p class="section-desc">أهم القطع التي ستقابلها وأنت تتبع مسار الباور على البورد، مع طريقة قراءتها بالعين المجردة والمالتيميتر.</p>
+    </div>
+    <div class="legend-grid">
+
+      <div class="legend-card">
+        <div class="legend-top">
+          <div class="legend-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="16" height="10" rx="2"/><path d="M18 10h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2"/></svg></div>
+          <div><div class="legend-name">البطارية</div><div class="legend-sym">VBAT</div></div>
+        </div>
+        <div class="legend-body">مصدر الطاقة الأساسي، جهدها يتغير حسب نسبة الشحن بين ٣.٧ و٤.٢ فولت تقريبًا.</div>
+      </div>
+
+      <div class="legend-card">
+        <div class="legend-top">
+          <div class="legend-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div>
+          <div><div class="legend-name">الفيوز</div><div class="legend-sym">Fuse</div></div>
+        </div>
+        <div class="legend-body">قطعة حماية تقطع نفسها عند التماس، تقاس بالمالتيميتر على وضع "الاستمرارية" — صوت "بيب" يعني سليم.</div>
+      </div>
+
+      <div class="legend-card">
+        <div class="legend-top">
+          <div class="legend-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4v16M4 4h4M4 20h4M16 4v16M16 4h4M16 20h4"/></svg></div>
+          <div><div class="legend-name">المكثف (كباستور)</div><div class="legend-sym">C — Capacitor</div></div>
+        </div>
+        <div class="legend-body">يخزن ويفلتر الجهد بجانب كل IC. عند تلفه يسبب "تماس" غالبًا لأنه يقصر الجهد على الأرضي.</div>
+      </div>
+
+      <div class="legend-card">
+        <div class="legend-top">
+          <div class="legend-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12c2-4 4-4 6 0s4 4 6 0 4-4 6 0"/></svg></div>
+          <div><div class="legend-name">الملف (كويل)</div><div class="legend-sym">L — Coil / Inductor</div></div>
+        </div>
+        <div class="legend-body">ينظّم التيار الخارج من الـ IC قبل وصوله للمكون التالي، شكله معدني صغير مربع أو دائري.</div>
+      </div>
+
+      <div class="legend-card">
+        <div class="legend-top">
+          <div class="legend-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
+          <div><div class="legend-name">دائرة متكاملة</div><div class="legend-sym">IC / PMIC</div></div>
+        </div>
+        <div class="legend-body">أي "مربع" أسود بعدة أرجل — يحتوي دوائر معقدة (باور، شحن، شاحن) داخل شريحة واحدة.</div>
+      </div>
+
+      <div class="legend-card">
+        <div class="legend-top">
+          <div class="legend-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
+          <div><div class="legend-name">نقطة اختبار</div><div class="legend-sym">Test Point</div></div>
+        </div>
+        <div class="legend-body">دائرة صغيرة مكشوفة على البورد مخصصة لوضع طرف المالتيميتر عليها مباشرة أثناء الفحص.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= TEST POINTS TABLE ================= -->
+  <section class="section" id="tests">
+    <div class="section-head">
+      <span class="tag">03 — DIAGNOSTICS</span>
+      <h2 class="section-title">جدول الفحص السريع</h2>
+      <p class="section-desc">ترتيب مقترح لفحص دائرة الباور بالمالتيميتر عند استلام جهاز "ميت" أو لا يشحن.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>الخطوة</th><th>نقطة الفحص</th><th>القراءة المتوقعة</th><th>إذا كانت غير طبيعية</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>١</td><td>كونيكتور البطارية</td><td class="mono">٣.٧ - ٤.٢ V</td><td>افحص الكونيكتور والكابل قبل أي شيء آخر</td></tr>
+          <tr><td>٢</td><td>طرفي الفيوز الرئيسي</td><td class="mono">استمرارية (٠ أوم تقريبًا)</td><td>فيوز مفتوح ⇐ افحص تماس بعده مباشرة</td></tr>
+          <tr><td>٣</td><td>مقاومة VBAT إلى الأرضي</td><td class="mono">عدة كيلو أوم فأعلى</td><td>مقاومة قريبة من الصفر = تماس (Short)</td></tr>
+          <tr><td>٤</td><td>خرج PMIC الرئيسي</td><td class="mono">١.٨ / ١.٢ V (حسب الخط)</td><td>غياب الجهد ⇐ اشتباه في الـ IC نفسه أو تغذيته</td></tr>
+          <tr><td>٥</td><td>إشارة زر الباور</td><td class="mono">١.٨ V ثم ٠ V عند الضغط</td><td>ثابتة بدون تغيير ⇐ افحص مسار الزر وسلكه</td></tr>
+          <tr><td>٦</td><td>جهد نواة المعالج</td><td class="mono">٠.٨ - ١.١ V</td><td>سحب غير طبيعي ⇐ اشتباه تماس تحت المعالج</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>ملاحظة ختامية:</b> هذا الشرح مبسّط لفهم "منطق" دائرة الباور في هواتف هذه الفئة، وليس بديلاً عن قراءة Schematic / Boardview الرسمي لجهاز Samsung A10s (SM-A107F). القيم الفعلية على أي بورد حقيقي قد تختلف بحسب رقم الإصدار (Revision) ويجب التأكد منها ميدانيًا قبل أي تدخل بالفحص أو التصليح.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
